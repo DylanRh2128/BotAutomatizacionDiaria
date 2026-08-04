@@ -1,0 +1,43 @@
+{
+  "name": "Gmail Support Ticket Classifier",
+  "nodes": [
+    {
+      "name": "Gmail Trigger",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "notes": "Watches the inbox for new mail. Requires a Gmail OAuth2 credential configured inside n8n — never stored in this repo.",
+      "parameters": {
+        "pollTimes": { "item": [{ "mode": "everyMinute" }] },
+        "simple": false
+      }
+    },
+    {
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "notes": "Calls the API's webhook with the extracted email fields. Replace the URL with your deployed API's address.",
+      "parameters": {
+        "method": "POST",
+        "url": "https://your-deployed-api.example.com/tickets/from-email",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "X-Webhook-Secret", "value": "={{$env.WEBHOOK_SECRET}}" }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            { "name": "message_id", "value": "={{$json.id}}" },
+            { "name": "sender", "value": "={{$json.from}}" },
+            { "name": "subject", "value": "={{$json.subject}}" },
+            { "name": "body", "value": "={{$json.text}}" }
+          ]
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Gmail Trigger": {
+      "main": [[{ "node": "HTTP Request", "type": "main", "index": 0 }]]
+    }
+  }
+}
