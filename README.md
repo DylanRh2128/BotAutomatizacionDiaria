@@ -1,5 +1,8 @@
 # Gmail Support Ticket Classifier Bot
 
+> Also reachable at `/support` through this portfolio's `portfolio-gateway` reverse proxy,
+> which puts all the portfolio's APIs behind one public URL.
+
 ## Problem
 
 A small business gets support requests by email. Nobody has time to tag each one by hand, and
