@@ -22,18 +22,11 @@ CLASSIFY_TOOL = {
     },
 }
 
-_client = None
-
-
-def _get_client() -> Anthropic:
-    global _client
-    if _client is None:
-        _client = Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
-    return _client
+_client = Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
 
 def classify_ticket(subject: str, body: str) -> dict:
-    message = _get_client().messages.create(
+    message = _client.messages.create(
         model="claude-3-5-haiku-latest",
         max_tokens=300,
         tools=[CLASSIFY_TOOL],
