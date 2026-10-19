@@ -7,6 +7,6 @@
   it's the only thing stopping a stranger from posting fake tickets to a deployed instance.
 - Gmail credentials never touch this repo at all: n8n holds its own Gmail OAuth2 credential,
   entirely outside this codebase.
-- `POST /tickets/from-email` is the only endpoint reachable by an external system; `GET`
-  endpoints have no auth yet — acceptable for a portfolio demo, a real deployment would add at
-  least an API key on the read endpoints too.
+- `POST /tickets/from-email` needs `WEBHOOK_SECRET`; the `GET` endpoints (which expose stored
+  senders and email bodies) need a separate `API_KEY`. Both are compared with
+  `secrets.compare_digest` so response timing doesn't leak how much of a guess was right.

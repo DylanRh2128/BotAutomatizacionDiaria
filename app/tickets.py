@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from app.auth import verify_webhook_secret
+from app.auth import verify_api_key, verify_webhook_secret
 from app.classifier import classify_ticket
 from app.db import get_db
 from app.models import Ticket
@@ -41,7 +41,7 @@ def create_ticket_from_email(payload: TicketFromEmail, db: Session = Depends(get
     return ticket
 
 
-@router.get("/tickets", response_model=list[TicketOut])
+@router.get("/tickets", response_model=list[TicketOut], dependencies=[Depends(verify_api_key)])
 def list_tickets(
     category: str | None = None,
     urgency: str | None = None,
@@ -55,7 +55,7 @@ def list_tickets(
     return query.order_by(Ticket.created_at.desc()).all()
 
 
-@router.get("/tickets/{ticket_id}", response_model=TicketOut)
+@router.get("/tickets/{ticket_id}", response_model=TicketOut, dependencies=[Depends(verify_api_key)])
 def get_ticket(ticket_id: int, db: Session = Depends(get_db)):
     ticket = db.get(Ticket, ticket_id)
     if ticket is None:
@@ -63,7 +63,7 @@ def get_ticket(ticket_id: int, db: Session = Depends(get_db)):
     return ticket
 
 
-@router.get("/stats")
+@router.get("/stats", dependencies=[Depends(verify_api_key)])
 def get_stats(db: Session = Depends(get_db)):
     by_category = dict(db.query(Ticket.category, func.count()).group_by(Ticket.category).all())
     by_urgency = dict(db.query(Ticket.urgency, func.count()).group_by(Ticket.urgency).all())

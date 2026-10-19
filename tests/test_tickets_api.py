@@ -1,8 +1,9 @@
 from unittest.mock import patch
 
-from tests.conftest import WEBHOOK_SECRET
+from tests.conftest import API_KEY, WEBHOOK_SECRET
 
 HEADERS = {"X-Webhook-Secret": WEBHOOK_SECRET}
+READ_HEADERS = {"X-API-Key": API_KEY}
 EMAIL_PAYLOAD = {
     "message_id": "msg-1",
     "sender": "customer@example.com",
@@ -52,21 +53,21 @@ def test_incomplete_payload_returns_422(client):
 def test_list_tickets_with_filter(client):
     client.post("/tickets/from-email", json=EMAIL_PAYLOAD, headers=HEADERS)
 
-    response = client.get("/tickets", params={"category": "billing"})
+    response = client.get("/tickets", params={"category": "billing"}, headers=READ_HEADERS)
     assert response.status_code == 200
     assert len(response.json()) == 1
 
-    response = client.get("/tickets", params={"category": "technical"})
+    response = client.get("/tickets", params={"category": "technical"}, headers=READ_HEADERS)
     assert response.json() == []
 
 
 def test_get_ticket_by_id_and_404(client):
     created = client.post("/tickets/from-email", json=EMAIL_PAYLOAD, headers=HEADERS).json()
 
-    response = client.get(f"/tickets/{created['id']}")
+    response = client.get(f"/tickets/{created['id']}", headers=READ_HEADERS)
     assert response.status_code == 200
 
-    response = client.get("/tickets/999")
+    response = client.get("/tickets/999", headers=READ_HEADERS)
     assert response.status_code == 404
 
 
@@ -78,6 +79,12 @@ def test_stats(client):
         headers=HEADERS,
     )
 
-    response = client.get("/stats")
+    response = client.get("/stats", headers=READ_HEADERS)
     assert response.status_code == 200
     assert response.json() == {"by_category": {"billing": 2}, "by_urgency": {"high": 2}}
+
+
+def test_read_endpoints_require_api_key(client):
+    for path in ("/tickets", "/tickets/1", "/stats"):
+        assert client.get(path).status_code == 401
+        assert client.get(path, headers={"X-API-Key": "wrong"}).status_code == 401

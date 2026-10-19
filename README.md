@@ -39,7 +39,7 @@ Open `http://localhost:8000/docs` for the interactive API docs.
 ## Run it with Docker
 
 ```bash
-ANTHROPIC_API_KEY=your-real-key WEBHOOK_SECRET=your-secret docker compose up --build
+ANTHROPIC_API_KEY=your-real-key WEBHOOK_SECRET=your-secret API_KEY=your-read-key docker compose up --build
 ```
 
 The API is on `http://localhost:8002` (mapped from the container's port 8000). See
@@ -52,6 +52,12 @@ curl -X POST http://localhost:8000/tickets/from-email \
   -H "X-Webhook-Secret: your-secret" \
   -H "Content-Type: application/json" \
   -d '{"message_id":"abc123","sender":"customer@example.com","subject":"Refund request","body":"My order never arrived, I want a refund."}'
+```
+
+Reading tickets back needs the `API_KEY` instead:
+
+```bash
+curl -H "X-API-Key: your-read-key" http://localhost:8000/stats
 ```
 
 ## Documentation

@@ -27,7 +27,7 @@ _client = Anthropic(api_key=os.environ["ANTHROPIC_API_KEY"])
 
 def classify_ticket(subject: str, body: str) -> dict:
     message = _client.messages.create(
-        model="claude-3-5-haiku-latest",
+        model="claude-haiku-5-5",
         max_tokens=300,
         tools=[CLASSIFY_TOOL],
         tool_choice={"type": "tool", "name": "classify_ticket"},

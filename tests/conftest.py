@@ -9,11 +9,13 @@ from app.db import Base, get_db
 from app.main import app
 
 WEBHOOK_SECRET = "test-secret"
+API_KEY = "test-api-key"
 
 
 @pytest.fixture
 def client(monkeypatch):
     monkeypatch.setenv("WEBHOOK_SECRET", WEBHOOK_SECRET)
+    monkeypatch.setenv("API_KEY", API_KEY)
 
     engine = create_engine(
         "sqlite:///:memory:",
