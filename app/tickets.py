@@ -22,7 +22,7 @@ def create_ticket_from_email(payload: TicketFromEmail, db: Session = Depends(get
         return existing
 
     try:
-        classification = classify_ticket(subject=payload.subject, body=payload.body)
+        classification = classify_ticket(subject=payload.subject, body=payload.body, language=payload.language)
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"Failed to classify ticket: {e}")
 

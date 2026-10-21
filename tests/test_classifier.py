@@ -36,3 +36,12 @@ def test_classify_ticket_invalid_urgency_falls_back_to_low():
         result = classify_ticket("Subject", "Body")
 
     assert result["urgency"] == "low"
+
+
+def test_reason_language_reaches_the_prompt():
+    fake = _fake_response({"category": "billing", "urgency": "low", "reason": "x"})
+    with patch("app.classifier._client") as client:
+        client.chat.completions.create.return_value = fake
+        classify_ticket("Subject", "Body", language="es")
+    prompt = client.chat.completions.create.call_args.kwargs["messages"][0]["content"]
+    assert "Write the reason in Spanish." in prompt

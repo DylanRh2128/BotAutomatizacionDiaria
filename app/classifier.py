@@ -30,7 +30,8 @@ _client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 MODEL = os.environ.get("OPENAI_MODEL", "gpt-5.4-nano")
 
 
-def classify_ticket(subject: str, body: str) -> dict:
+def classify_ticket(subject: str, body: str, language: str = "en") -> dict:
+    reason_language = "Spanish" if language == "es" else "English"
     response = _client.chat.completions.create(
         model=MODEL,
         tools=[CLASSIFY_TOOL],
@@ -38,7 +39,8 @@ def classify_ticket(subject: str, body: str) -> dict:
         messages=[
             {
                 "role": "user",
-                "content": f"Classify this support ticket.\n\nSubject: {subject}\n\nBody: {body}",
+                "content": f"Classify this support ticket. Write the reason in {reason_language}.\n\n"
+                f"Subject: {subject}\n\nBody: {body}",
             }
         ],
     )

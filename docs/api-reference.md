@@ -49,3 +49,8 @@ Same shape as the webhook response. `404` if the ticket doesn't exist.
 ```json
 {"by_category": {"billing": 3, "technical": 1}, "by_urgency": {"high": 2, "low": 2}}
 ```
+
+### Optional `language` field
+
+`POST /tickets/from-email` accepts `"language": "en"` (default) or `"es"`: the language of the
+one-line `reason`. Category and urgency are always the fixed English enums.

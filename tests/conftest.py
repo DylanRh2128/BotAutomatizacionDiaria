@@ -35,7 +35,7 @@ def client(monkeypatch):
     app.dependency_overrides[get_db] = override_get_db
     monkeypatch.setattr(
         "app.tickets.classify_ticket",
-        lambda subject, body: {"category": "billing", "urgency": "high", "reason": "Fake reason."},
+        lambda subject, body, language="en": {"category": "billing", "urgency": "high", "reason": "Fake reason."},
     )
 
     yield TestClient(app)

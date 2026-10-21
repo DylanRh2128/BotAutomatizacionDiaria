@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel
 
@@ -8,6 +9,7 @@ class TicketFromEmail(BaseModel):
     sender: str
     subject: str
     body: str
+    language: Literal["en", "es"] = "en"  # language of the one-line reason
 
 
 class TicketOut(BaseModel):
