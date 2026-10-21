@@ -11,7 +11,7 @@ there's no visibility into how many billing vs. technical issues came in this we
 ## Solution
 
 A new email triggers n8n's Gmail node, which calls this API's webhook with the email's
-content. The API classifies it with Claude (category + urgency + a one-line reason) and stores
+content. The API classifies it with an LLM (OpenAI) (category + urgency + a one-line reason) and stores
 it, so you get a running history and aggregate stats without touching a spreadsheet.
 
 n8n owns watching Gmail (its Gmail Trigger node handles OAuth and polling); this API owns
@@ -21,7 +21,7 @@ importable example of the n8n side.
 
 ## Stack
 
-Python + FastAPI + PostgreSQL (SQLAlchemy) + Claude API (Anthropic) + n8n (Gmail trigger only).
+Python + FastAPI + PostgreSQL (SQLAlchemy) + OpenAI API + n8n (Gmail trigger only).
 
 ## How to run it
 
@@ -30,7 +30,7 @@ python -m venv .venv
 .venv/Scripts/activate        # or source .venv/bin/activate on Linux/Mac
 pip install -r requirements.txt
 
-cp .env.example .env          # fill in DATABASE_URL, ANTHROPIC_API_KEY, WEBHOOK_SECRET
+cp .env.example .env          # fill in DATABASE_URL, OPENAI_API_KEY, WEBHOOK_SECRET
 uvicorn app.main:app --reload
 ```
 
@@ -39,7 +39,7 @@ Open `http://localhost:8000/docs` for the interactive API docs.
 ## Run it with Docker
 
 ```bash
-ANTHROPIC_API_KEY=your-real-key WEBHOOK_SECRET=your-secret API_KEY=your-read-key docker compose up --build
+OPENAI_API_KEY=your-real-key WEBHOOK_SECRET=your-secret API_KEY=your-read-key docker compose up --build
 ```
 
 The API is on `http://localhost:8002` (mapped from the container's port 8000). See

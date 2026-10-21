@@ -30,7 +30,7 @@ Response `200` (also returned unchanged if `message_id` was already seen — ide
 }
 ```
 
-Errors: `422` if a required field is missing, `502` if the Claude API call fails.
+Errors: `422` if a required field is missing, `502` if the OpenAI API call fails.
 
 All `GET` endpoints below require header `X-API-Key` matching the server's `API_KEY`
 (`401` if missing or wrong). It's a different secret from the webhook's, so n8n never holds read

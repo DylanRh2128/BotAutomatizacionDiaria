@@ -4,7 +4,7 @@
 
 New email → n8n's Gmail Trigger node fires → n8n's HTTP Request node calls
 `POST /tickets/from-email` with the extracted fields → `app/classifier.py` classifies with
-Claude (tool use) → `app/tickets.py` persists a `Ticket` row → response returned to n8n (ignored
+OpenAI (function calling) → `app/tickets.py` persists a `Ticket` row → response returned to n8n (ignored
 by the workflow, but useful for manual testing/`curl`).
 
 ## Why n8n handles Gmail, not this code
@@ -39,7 +39,7 @@ database's constraints for you.
 
 `gmail_message_id` is unique. If n8n retries a webhook call (network hiccup, workflow re-run),
 `POST /tickets/from-email` returns the existing ticket instead of creating a duplicate or
-calling Claude a second time for the same email.
+calling the LLM a second time for the same email.
 
 ## Junior-acceptable vs. what a senior would do differently
 
@@ -48,6 +48,6 @@ calling Claude a second time for the same email.
 - **Single shared secret, not per-workflow keys**: fine for one n8n workflow calling one API; a
   senior supporting multiple external callers would issue a distinct key per caller so one can
   be revoked without breaking the others.
-- **No retry on Claude API failures**: a transient failure returns a 502 and the email is simply
+- **No retry on OpenAI API failures**: a transient failure returns a 502 and the email is simply
   never marked processed by n8n's workflow (so it can be manually resent); a senior would add a
   bounded retry with backoff before giving up.

@@ -1,7 +1,7 @@
 # Testing
 
-Run with: `pytest` (needs `DATABASE_URL`, `ANTHROPIC_API_KEY`, `WEBHOOK_SECRET` set to any dummy
-value — tests use an in-memory SQLite database and a mocked classifier, never the real Claude
+Run with: `pytest` (needs `DATABASE_URL`, `OPENAI_API_KEY`, `WEBHOOK_SECRET` set to any dummy
+value — tests use an in-memory SQLite database and a mocked classifier, never the real OpenAI
 API, and never n8n or Gmail).
 
 - `tests/test_classifier.py` — a valid `tool_use` response parses correctly; an invalid

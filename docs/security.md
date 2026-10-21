@@ -1,6 +1,6 @@
 # Security
 
-- `DATABASE_URL`, `ANTHROPIC_API_KEY`, and `WEBHOOK_SECRET` are read from environment variables
+- `DATABASE_URL`, `OPENAI_API_KEY`, and `WEBHOOK_SECRET` are read from environment variables
   (`.env`, loaded via `python-dotenv`). `.env` is git-ignored; only `.env.example` (placeholder
   values) is committed.
 - `WEBHOOK_SECRET` should be a long random string (see `.env.example`), not a guessable word —

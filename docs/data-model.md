@@ -12,6 +12,6 @@
 | text             | text      | email body                               |
 | category         | string    | one of: billing, technical, shipping, account, other |
 | urgency          | string    | one of: low, medium, high                |
-| reason           | text      | one-line explanation from Claude          |
+| reason           | text      | one-line explanation from the LLM          |
 
 Single table — no relations needed for this project.

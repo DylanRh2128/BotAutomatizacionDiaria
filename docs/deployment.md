@@ -3,7 +3,7 @@
 ## Docker (local)
 
 ```bash
-ANTHROPIC_API_KEY=your-real-key WEBHOOK_SECRET=your-secret docker compose up --build
+OPENAI_API_KEY=your-real-key WEBHOOK_SECRET=your-secret docker compose up --build
 ```
 
 Two containers: `api` (this app, port `8002` on the host) and `db` (`postgres:16-alpine`, port
@@ -36,5 +36,5 @@ the right-sized tool.
 ## Deploying beyond local Docker
 
 The `Dockerfile` is what a platform like Railway or Render would build directly — set
-`DATABASE_URL`, `ANTHROPIC_API_KEY`, and `WEBHOOK_SECRET` as environment variables in their
+`DATABASE_URL`, `OPENAI_API_KEY`, and `WEBHOOK_SECRET` as environment variables in their
 dashboard, and update the n8n workflow's HTTP Request node to the deployed URL.
